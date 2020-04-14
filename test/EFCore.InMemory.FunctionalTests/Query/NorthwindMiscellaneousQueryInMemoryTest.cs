@@ -118,10 +118,16 @@ namespace Microsoft.EntityFrameworkCore.Query
             return base.Random_next_is_not_funcletized_6(async);
         }
 
-        [ConditionalTheory]
-        public override Task DefaultIfEmpty_in_subquery_nested(bool async)
+        [ConditionalTheory(Skip = "issue#17386")]
+        public override Task Where_query_composition5(bool async)
         {
-            return base.DefaultIfEmpty_in_subquery_nested(async);
+            return base.Where_query_composition5(async);
+        }
+
+        [ConditionalTheory(Skip = "issue#17386")]
+        public override Task Where_query_composition6(bool async)
+        {
+            return base.Where_query_composition6(async);
         }
     }
 }

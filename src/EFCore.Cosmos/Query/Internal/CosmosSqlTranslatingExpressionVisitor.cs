@@ -69,6 +69,34 @@ namespace Microsoft.EntityFrameworkCore.Cosmos.Query.Internal
         ///     any release. You should only use it directly in your code with extreme caution and knowing that
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
+        public virtual string TranslationErrorDetails { get; private set; }
+
+        /// <summary>
+        ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+        ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+        ///     any release. You should only use it directly in your code with extreme caution and knowing that
+        ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+        /// </summary>
+        protected virtual void ProvideTranslationErrorDetails([NotNull] string details)
+        {
+            Check.NotNull(details, nameof(details));
+
+            if (TranslationErrorDetails == null)
+            {
+                TranslationErrorDetails = details;
+            }
+            else
+            {
+                TranslationErrorDetails += " " + details;
+            }
+        }
+
+        /// <summary>
+        ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+        ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+        ///     any release. You should only use it directly in your code with extreme caution and knowing that
+        ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+        /// </summary>
         public virtual SqlExpression Translate([NotNull] Expression expression)
         {
             var result = Visit(expression);
@@ -267,10 +295,23 @@ namespace Microsoft.EntityFrameworkCore.Cosmos.Query.Internal
 
             var innerExpression = Visit(memberExpression.Expression);
 
-            return TryBindMember(innerExpression, MemberIdentity.Create(memberExpression.Member))
-                ?? (TranslationFailed(memberExpression.Expression, innerExpression, out var sqlInnerExpression)
-                    ? null
-                    : _memberTranslatorProvider.Translate(sqlInnerExpression, memberExpression.Member, memberExpression.Type));
+            var binding = TryBindMember(innerExpression, MemberIdentity.Create(memberExpression.Member));
+            if (binding != null)
+            {
+                return binding;
+            }
+
+            if (innerExpression is EntityReferenceExpression entityReferenceExpression)
+            {
+                ProvideTranslationErrorDetails(
+                    CoreStrings.QueryUnableToTranslateMember(
+                        memberExpression.Member.Name,
+                        entityReferenceExpression.EntityType.DisplayName()));
+            }
+
+            return TranslationFailed(memberExpression.Expression, innerExpression, out var sqlInnerExpression)
+                ? null
+                : _memberTranslatorProvider.Translate(sqlInnerExpression, memberExpression.Member, memberExpression.Type);
         }
 
         /// <summary>

@@ -3,6 +3,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.TestModels.Northwind;
 using Microsoft.EntityFrameworkCore.TestUtilities;
 using Xunit;
@@ -158,7 +159,8 @@ FROM ""Orders"" AS ""o""");
 
         public override Task Member_binding_after_ctor_arguments_fails_with_client_eval(bool async)
         {
-            return AssertTranslationFailed(() => base.Member_binding_after_ctor_arguments_fails_with_client_eval(async));
+            return AssertTranslationFailed(
+                () => base.Member_binding_after_ctor_arguments_fails_with_client_eval(async));
         }
 
         [ConditionalTheory(Skip = "Issue#17230")]

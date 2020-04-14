@@ -1091,7 +1091,15 @@ namespace Microsoft.EntityFrameworkCore.Cosmos.Query.Internal
         }
 
         private SqlExpression TranslateExpression(Expression expression)
-            => _sqlTranslator.Translate(expression);
+        {
+            var translation = _sqlTranslator.Translate(expression);
+            if (_sqlTranslator.TranslationErrorDetails != null)
+            {
+                ProvideTranslationErrorDetails(_sqlTranslator.TranslationErrorDetails);
+            }
+
+            return translation;
+        }
 
         private SqlExpression TranslateLambdaExpression(
             ShapedQueryExpression shapedQueryExpression, LambdaExpression lambdaExpression)

@@ -1,7 +1,9 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -44,7 +46,8 @@ namespace Microsoft.EntityFrameworkCore.Query
             => AssertTranslationFailed(() => base.Where_datetimeoffset_second_component(async));
 
         public override Task Where_datetimeoffset_utcnow(bool async)
-            => AssertTranslationFailed(() => base.Where_datetimeoffset_utcnow(async));
+            => AssertTranslationFailed(
+                () => base.Where_datetimeoffset_utcnow(async));
 
         public override Task Where_datetimeoffset_year_component(bool async)
             => AssertTranslationFailed(() => base.Where_datetimeoffset_year_component(async));

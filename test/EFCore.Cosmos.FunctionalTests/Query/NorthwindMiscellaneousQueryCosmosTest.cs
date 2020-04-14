@@ -4113,6 +4113,14 @@ FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] IN (""ALFKI"") OR (c[""CustomerID""] = null)))");
         }
 
+        [ConditionalTheory(Skip = "Issue #17246")]
+        public override Task All_client_and_server_top_level(bool async)
+            => base.All_client_and_server_top_level(async);
+
+        [ConditionalTheory(Skip = "Issue #17246")]
+        public override Task All_client_or_server_top_level(bool async)
+            => base.All_client_or_server_top_level(async);
+
         private void AssertSql(params string[] expected)
             => Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
 
