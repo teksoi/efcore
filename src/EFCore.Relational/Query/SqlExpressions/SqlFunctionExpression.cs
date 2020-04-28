@@ -13,7 +13,6 @@ namespace Microsoft.EntityFrameworkCore.Query.SqlExpressions
 {
     public class SqlFunctionExpression : SqlExpression
     {
-        // niladic
         public SqlFunctionExpression(
             [NotNull] string functionName,
             bool nullable,
@@ -23,7 +22,6 @@ namespace Microsoft.EntityFrameworkCore.Query.SqlExpressions
         {
         }
 
-        // niladic
         public SqlFunctionExpression(
             [NotNull] string schema,
             [NotNull] string functionName,
@@ -34,7 +32,6 @@ namespace Microsoft.EntityFrameworkCore.Query.SqlExpressions
         {
         }
 
-        // niladic
         public SqlFunctionExpression(
             [NotNull] SqlExpression instance,
             [NotNull] string functionName,
@@ -46,7 +43,6 @@ namespace Microsoft.EntityFrameworkCore.Query.SqlExpressions
         {
         }
 
-        // niladic
         private SqlFunctionExpression(
             [CanBeNull] SqlExpression instance,
             [CanBeNull] string schema,
